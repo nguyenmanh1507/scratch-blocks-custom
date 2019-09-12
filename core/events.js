@@ -164,6 +164,11 @@ Blockly.Events.COMMENT_DELETE = 'comment_delete';
 Blockly.Events.UI = 'ui';
 
 /**
+ * Name of event that records a workspace load.
+ */
+Blockly.Events.FINISHED_LOADING = 'finished_loading';
+
+/**
  * List of events queued for firing.
  * @private
  */

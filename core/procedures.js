@@ -220,11 +220,15 @@ Blockly.Procedures.rename = function(name) {
  */
 Blockly.Procedures.flyoutCategory = function(workspace) {
   var xmlList = [];
-
   Blockly.Procedures.addCreateButton_(workspace, xmlList);
 
   // Create call blocks for each procedure defined in the workspace
-  var mutations = Blockly.Procedures.allProcedureMutations(workspace);
+  var mutations;
+  if (workspace.headlessWs_) {
+    mutations = Blockly.Procedures.allProcedureMutations(workspace.headlessWs_);
+  } else {
+    mutations = Blockly.Procedures.allProcedureMutations(workspace);
+  }
   mutations = Blockly.Procedures.sortProcedureMutations_(mutations);
   for (var i = 0; i < mutations.length; i++) {
     var mutation = mutations[i];

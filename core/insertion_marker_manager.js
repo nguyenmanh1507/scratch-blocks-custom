@@ -445,7 +445,7 @@ Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(candidate,
       deleteArea != Blockly.DELETE_AREA_TOOLBOX;
   var wouldDelete = !!deleteArea && !this.topBlock_.getParent() &&
       this.topBlock_.isDeletable();
-
+  
   return wouldDelete && !wouldConnect;
 };
 

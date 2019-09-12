@@ -274,7 +274,12 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   if (isDeletingProcDef) {
     var ws = this.workspace_;
     setTimeout(function() {
-      var allBlocks = ws.getAllBlocks();
+      var allBlocks;
+      if (ws.headlessWs_) {
+        allBlocks = ws.headlessWs_.getAllBlocks();
+      } else {
+        allBlocks = ws.getAllBlocks();
+      }
       for (var i = 0; i < allBlocks.length; i++) {
         var block = allBlocks[i];
         if (block.type == Blockly.PROCEDURES_CALL_BLOCK_TYPE) {
