@@ -312,6 +312,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
       this.horizontalLayout_, false, 'blocklyFlyoutScrollbar');
 
   this.position();
+  this.hide();
 
   Array.prototype.push.apply(this.eventWrappers_,
       Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this, this.wheel_));
@@ -491,7 +492,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       xmlList.splice.apply(xmlList, [i, 1].concat(newList));
       xml = xmlList[i];
     }
-    if (xml.tagName) {
+    // koov-specific: allow empty category at the end of list
+    if (xml && xml.tagName) {
       var tagName = xml.tagName.toUpperCase();
       var default_gap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
       if (tagName == 'BLOCK') {

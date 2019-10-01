@@ -50,6 +50,7 @@ goog.require('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
+goog.require('Blockly.BlockCopyCategory');
 
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -115,6 +116,7 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface
       Blockly.DataCategory);
   this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
       Blockly.Procedures.flyoutCategory);
+  this.registerToolboxCategoryCallback(Blockly.BLOCKCOPY_CATEGORY_NAME, Blockly.BlockCopyCategory);
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -1227,6 +1229,19 @@ Blockly.WorkspaceSvg.prototype.recordBlocksArea_ = function() {
  */
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   var xy = new goog.math.Coordinate(e.clientX, e.clientY);
+  var toolbox = this.getToolbox();
+  var toolboxCopy = this.options.toolboxCopy;
+  if (xy.x - 60 <= 20) {
+    toolbox.addStyle('blockNearToolbox');
+    if (toolboxCopy) {
+      toolbox.addStyle('toolboxCopy');
+    }
+  } else {
+    toolbox.removeStyle('blockNearToolbox');
+    if (toolboxCopy) {
+      toolbox.removeStyle('toolboxCopy');
+    }
+  }
   if (this.deleteAreaTrash_ && this.deleteAreaTrash_.contains(xy)) {
     return Blockly.DELETE_AREA_TRASH;
   }

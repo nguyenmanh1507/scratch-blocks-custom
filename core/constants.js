@@ -309,6 +309,13 @@ Blockly.VARIABLE_CATEGORY_NAME = 'VARIABLE';
 Blockly.PROCEDURE_CATEGORY_NAME = 'PROCEDURE';
 
 /**
+ * String for use in the "custom" attribute of a category in toolbox xml.
+ * This is for copy block
+ * @const {string}
+ */
+Blockly.BLOCKCOPY_CATEGORY_NAME = 'BLOCKCOPY_CATEGORY';
+
+/**
  * String for use in the dropdown created in field_variable.
  * This string indicates that this option in the dropdown is 'Rename
  * variable...' and if selected, should trigger the prompt to rename a variable.

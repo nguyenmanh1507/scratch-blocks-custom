@@ -113,6 +113,13 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.potentialVariableMap_ = null;
+
+  /**
+   * @type {!Array}
+   * Store block copy
+   * @private
+   */
+  this.blockCopy_ = [];
 };
 
 /**

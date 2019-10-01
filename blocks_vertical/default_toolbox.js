@@ -561,4 +561,6 @@ Blockly.Blocks.defaultToolbox = '<xml id="toolbox-categories" style="display: no
       '</value>' +
     '</block>' +
   '</category>' +
+    '<category name="%{BKY_CATEGORY_BLOCKCOPY}" id="blockcopy" colour="#000000" secondaryColour="#000000" custom="BLOCKCOPY_CATEGORY">' +
+    '</category>' +
   '</xml>';

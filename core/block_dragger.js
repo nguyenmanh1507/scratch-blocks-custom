@@ -260,7 +260,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   }
   Blockly.Events.setGroup(false);
 
-  if (isOutside) {
+  if (isOutside && !this.draggingBlock_.shouldDisposeOutside_) {
     var ws = this.workspace_;
     // Reset a drag to outside of scratch-blocks
     setTimeout(function() {
@@ -339,6 +339,14 @@ Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
  */
 Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
   var trashcan = this.workspace_.trashcan;
+  var toolbox = this.workspace_.getToolbox();
+  var toolboxCopy = this.workspace_.options.toolboxCopy;
+
+  if (toolboxCopy && this.wouldDeleteBlock_) {
+    var block = Blockly.Xml.blockToDom(this.draggingBlock_);
+    var blockText = Blockly.Xml.domToText(block);
+    this.workspace_.blockCopy_.push(blockText);
+  }
 
   if (this.wouldDeleteBlock_) {
     if (trashcan) {
@@ -347,6 +355,9 @@ Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
     // Fire a move event, so we know where to go back to for an undo.
     this.fireMoveEvent_();
     this.draggingBlock_.dispose(false, true);
+    toolbox.removeStyle('blockNearToolbox');
+    toolbox.removeStyle('blockCopy');
+    toolbox.refreshSelection();
   } else if (trashcan) {
     // Make sure the trash can is closed.
     trashcan.close();

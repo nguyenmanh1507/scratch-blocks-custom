@@ -186,6 +186,9 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
   this.categoryMenu_.populate(newTree);
   this.showAll_();
   this.setSelectedItem(this.categoryMenu_.categories_[0], false);
+  if (this.flyout_.autoClose) {
+    this.flyout_.hide();
+  }
 };
 
 /**
@@ -265,7 +268,10 @@ Blockly.Toolbox.prototype.position = function() {
  * Unhighlight any previously specified option.
  */
 Blockly.Toolbox.prototype.clearSelection = function() {
-  this.setSelectedItem(null);
+  // koov-specific: fix error open flyout after block deleted
+  if (!this.flyout_.autoClose) {
+    this.setSelectedItem(null);
+  }
 };
 
 /**

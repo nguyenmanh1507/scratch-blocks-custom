@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>My Playground</title>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+    />
+
+    <script src="../blockly_uncompressed_vertical.js"></script>
+    <script src="../msg/messages.js"></script>
+    <script src="../msg/scratch_msgs.js"></script>
+    <script src="../blocks_vertical/vertical_extensions.js"></script>
+    <script src="../blocks_common/math.js"></script>
+    <script src="../blocks_common/matrix.js"></script>
+    <script src="../blocks_common/note.js"></script>
+    <script src="../blocks_common/text.js"></script>
+    <script src="../blocks_common/colour.js"></script>
+    <script src="../blocks_vertical/control.js"></script>
+    <script src="../blocks_vertical/event.js"></script>
+    <script src="../blocks_vertical/motion.js"></script>
+    <script src="../blocks_vertical/looks.js"></script>
+    <script src="../blocks_vertical/procedures.js"></script>
+    <script src="../blocks_vertical/operators.js"></script>
+    <!-- <script src="../blocks_vertical/pen.js"></script> -->
+    <script src="../blocks_vertical/sound.js"></script>
+    <script src="../blocks_vertical/sensing.js"></script>
+    <script src="../blocks_vertical/data.js"></script>
+    <script src="../blocks_vertical/extensions.js"></script>
+    <script src="../blocks_vertical/default_toolbox.js"></script>
+
+    <style>
+      #blocklyDiv {
+        height: calc(100vh - 150px);
+        width: 100%;
+      }
+      #outside {
+        height: 150px;
+        width: 100%;
+        background-color: cornflowerblue;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #trash {
+        width: 50px;
+        height: 50px;
+        background-color: rgb(245, 45, 45);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+        color: aliceblue;
+        padding: 1rem;
+      }
+      .blocklyToolboxDiv.blockNearToolbox::after {
+        font-family: "Font Awesome 5 Free";
+        content: "\f2ed";
+        background-color: red;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+      }
+      .blocklyToolboxDiv.toolboxCopy.blockNearToolbox::after {
+        font-family: "Font Awesome 5 Free";
+        content: "\f0c5";
+        background-color: blue;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="blocklyDiv"></div>
+    <div id="outside">
+      <div id="trash"><i class="fas fa-trash-alt"></i></div>
+    </div>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
