@@ -637,6 +637,22 @@ Blockly.Connection.prototype.targetBlock = function() {
  * @protected
  */
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
+
+  // ghost can connect to ghost
+  if (this.check_ == 'GHOST' && otherConnection.check_ == 'GHOST') {
+    return true;
+  }
+
+  // ghost can't connect other type
+  if (this.check_ == 'GHOST' && otherConnection.check_ != 'GHOST') {
+    return false;
+  }
+
+  // other type can't connect to ghost
+  if (this.check_ != 'GHOST' && otherConnection.check_ == 'GHOST') {
+    return false;
+  }
+  
   if (!this.check_ || !otherConnection.check_) {
     // One or both sides are promiscuous enough that anything will fit.
     return true;

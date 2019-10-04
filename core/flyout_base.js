@@ -506,7 +506,6 @@ Blockly.Flyout.prototype.show = function(xmlList) {
           return block.id === id;
         });
 
-
         // If we found a recycled item, reuse the BlockSVG from last time.
         // Otherwise, convert the XML block to a BlockSVG.
         var curBlock;
@@ -516,6 +515,10 @@ Blockly.Flyout.prototype.show = function(xmlList) {
           curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
         }
 
+        if (curBlock.type === 'wait') {
+          curBlock.setHighlightBlock(true);
+        }
+        
         if (curBlock.disabled) {
           // Record blocks that were initially disabled.
           // Do not enable these blocks as a result of capacity filtering.

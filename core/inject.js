@@ -225,6 +225,36 @@ Blockly.createDom_ = function(container, options) {
         'operator': 'over'
       },
       replacementGlowFilter);
+
+  // Filter for highlighting
+  var highlightGlowFilter = Blockly.utils.createSvgElement('filter',
+      {
+        'id': 'blocklyHighlightGlowFilter' + rnd,
+        'height': '160%',
+        'width': '180%',
+        y: '-30%',
+        x: '-40%'
+      },
+      defs);
+  options.highlightGlowBlur = Blockly.utils.createSvgElement('feGaussianBlur',
+      {
+        'in': 'SourceGraphic',
+        'stdDeviation': Blockly.Colours.highlightGlowSize
+      },
+      highlightGlowFilter);
+  // Set all gaussian blur pixels to 1 opacity before applying flood
+  var componentTransfer = Blockly.utils.createSvgElement('feComponentTransfer', {'result': 'outBlur'}, highlightGlowFilter);
+  Blockly.utils.createSvgElement('feFuncA',
+      {'type': 'table', 'tableValues': '0' + goog.string.repeat(' 1', 16)}, componentTransfer);
+  // Color the highlight
+  Blockly.utils.createSvgElement('feFlood',
+      {'flood-color': Blockly.Colours.highlightGlow,
+        'flood-opacity': Blockly.Colours.highlightGlowOpacity, 'result': 'outColor'}, highlightGlowFilter);
+  Blockly.utils.createSvgElement('feComposite',
+      {'in': 'outColor', 'in2': 'outBlur',
+        'operator': 'in', 'result': 'outGlow'}, highlightGlowFilter);
+
+
   /*
     <pattern id="blocklyDisabledPattern837493" patternUnits="userSpaceOnUse"
              width="10" height="10">
@@ -253,9 +283,37 @@ Blockly.createDom_ = function(container, options) {
         'stroke': '#cc0'
       },
       disabledPattern);
+  
+  // Koov Highlight pattern
+  var koovHighlightPattern = Blockly.utils.createSvgElement('pattern',
+      {
+        'id': 'koovHighlightPattern' + rnd,
+        'patternUnits': 'userSpaceOnUse',
+        'width': 10,
+        'height': 10
+      },
+      defs);
+
+  Blockly.utils.createSvgElement('rect',
+      {
+        'width': 10,
+        'height': 10,
+        'fill': '#ffff00'
+      },
+      koovHighlightPattern);
+
+  Blockly.utils.createSvgElement('path',
+      {
+        'd': 'M 0 0 L 10 10 M 10 0 L 0 10',
+        'stroke': '#ffff00'
+      },
+      koovHighlightPattern);
+
   options.stackGlowFilterId = stackGlowFilter.id;
   options.replacementGlowFilterId = replacementGlowFilter.id;
+  options.highlightGlowFilterId = highlightGlowFilter.id;
   options.disabledPatternId = disabledPattern.id;
+  options.koovHighlightPatternId = koovHighlightPattern.id;
 
   options.gridPattern = Blockly.Grid.createDom(rnd, options.gridOptions, defs);
   return svg;

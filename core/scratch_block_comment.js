@@ -308,6 +308,10 @@ Blockly.ScratchBlockComment.prototype.autoPosition_ = function() {
   if (!this.needsAutoPositioning_) return;
   if (this.isMinimized_) {
     var minimizedOffset = 4 * Blockly.BlockSvg.GRID_UNIT;
+    // koov-specific
+    if (this.block_.isKoovComment_) {
+      minimizedOffset = 16 * Blockly.BlockSvg.GRID_UNIT;
+    }
     this.x_ = this.block_.RTL ?
         this.iconXY_.x - this.getBubbleSize().width - minimizedOffset :
         this.iconXY_.x + minimizedOffset;
@@ -471,6 +475,10 @@ Blockly.ScratchBlockComment.prototype.setSize = function(width, height) {
  * @package
  */
 Blockly.ScratchBlockComment.prototype.getLabelText = function() {
+  if (this.block_.isKoovComment_) {
+    return this.text_;
+  }
+
   if (this.text_.length > Blockly.ScratchBlockComment.MAX_LABEL_LENGTH) {
     if (this.block_.RTL) {
       return '\u2026' + this.text_.slice(0, Blockly.ScratchBlockComment.MAX_LABEL_LENGTH);

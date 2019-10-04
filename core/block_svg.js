@@ -138,6 +138,13 @@ Blockly.BlockSvg.prototype.isGlowingBlock_ = false;
 Blockly.BlockSvg.prototype.isGlowingStack_ = false;
 
 /**
+ * Whether the block's whole stack glows as if running.
+ * @type {boolean}
+ * @private
+ */
+Blockly.BlockSvg.prototype.isKoovComment_ = false;
+
+/**
  * Constant for identifying rows that are to be rendered inline.
  * Don't collide with Blockly.INPUT_VALUE and friends.
  * @const
@@ -240,6 +247,31 @@ Blockly.BlockSvg.prototype.setGlowStack = function(isGlowingStack) {
     svg.setAttribute('filter', 'url(#' + stackGlowFilterId + ')');
   } else if (!this.isGlowingStack_ && svg.hasAttribute('filter')) {
     svg.removeAttribute('filter');
+  }
+};
+
+
+/**
+ * Glow only this particular block, to highlight it visually as if it's running.
+ * @param {boolean} isHighlightingBlock Whether this block should glow as if running.
+ */
+Blockly.BlockSvg.prototype.setHighlightBlock = function(isHighlightingBlock) {
+  //pxtblockly: Sanity check that the block is rendered before setting the highlight
+  if (!this.rendered) {
+    return;
+  }
+  this.isHighlightingBlock_ = isHighlightingBlock;
+  // Update the applied SVG filter if the property has changed
+  // var svg = this.svgPath_;
+  if (this.isHighlightingBlock_ && !this.svgPathHighlight_) {
+    var highlightGlowFilterId = Blockly.mainWorkspace.options.highlightGlowFilterId || 'blocklyHighlightGlowFilter';
+    this.svgPathHighlight_ = this.svgPath_.cloneNode(true);
+    this.svgPathHighlight_.setAttribute('fill', 'none');
+    this.svgPathHighlight_.setAttribute('filter', 'url(#' + highlightGlowFilterId + ')');
+    this.getSvgRoot().appendChild(this.svgPathHighlight_);
+  } else if (!this.isHighlightingBlock_ && this.svgPathHighlight_) {
+    this.getSvgRoot().removeChild(this.svgPathHighlight_);
+    this.svgPathHighlight_ = null;
   }
 };
 
@@ -868,6 +900,49 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
   // not supported
+  if (this.disabled || this.getInheritedDisabled()) {
+    var added = Blockly.utils.addClass(
+        /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
+    if (added) {
+      this.svgPath_.setAttribute('fill',
+          'url(#' + this.workspace.options.disabledPatternId + ')');
+    }
+  } else {
+    var removed = Blockly.utils.removeClass(
+        /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
+    if (removed) {
+      this.updateColour();
+    }
+  }
+  var children = this.getChildren(false);
+  for (var i = 0, child; child = children[i]; i++) {
+    child.updateDisabled();
+  }
+};
+
+/**
+ * Enable or disable a block.
+ */
+Blockly.BlockSvg.prototype.updateInputHighlighted = function() {
+  // not supported
+  if (this.disabled || this.getInheritedDisabled()) {
+    var added = Blockly.utils.addClass(
+        /** @type {!Element} */ (this.svgGroup_), 'koovInputHighlight');
+    if (added) {
+      this.svgPath_.setAttribute('fill',
+          'url(#' + this.workspace.options.koovHighlightPatternId + ')');
+    }
+  } else {
+    var removed = Blockly.utils.removeClass(
+        /** @type {!Element} */ (this.svgGroup_), 'koovInputHighlight');
+    if (removed) {
+      this.updateColour();
+    }
+  }
+  var children = this.getChildren(false);
+  for (var i = 0, child; child = children[i]; i++) {
+    child.updateInputHighlighted();
+  }
 };
 
 /**
@@ -890,9 +965,11 @@ Blockly.BlockSvg.prototype.getCommentText = function() {
  * @param {number=} commentX Optional x position for scratch comment in workspace coordinates
  * @param {number=} commentY Optional y position for scratch comment in workspace coordinates
  * @param {boolean=} minimized Optional minimized state for scratch comment, defaults to false
+ * @param {boolean=} isKoovComment Optional minimized state for scratch comment, defaults to false
  */
 Blockly.BlockSvg.prototype.setCommentText = function(text, commentId,
-    commentX, commentY, minimized) {
+    commentX, commentY, minimized, isKoovComment) {
+  this.isKoovComment_ = isKoovComment || false;
   var changedState = false;
   if (goog.isString(text)) {
     if (!this.comment) {
@@ -999,6 +1076,49 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
     mutator.block_ = this;
     this.mutator = mutator;
     mutator.createIcon();
+  }
+};
+
+/**
+ * Set whether the block is disabled or not.
+ * @param {boolean} disabled True if disabled.
+ */
+Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
+  if (this.disabled != disabled) {
+    Blockly.BlockSvg.superClass_.setDisabled.call(this, disabled);
+    if (this.rendered) {
+      this.updateDisabled();
+    }
+  }
+};
+
+/**
+ * Set whether the block input is highlighted or not.
+ * @param {boolean} disabled True if disabled.
+ */
+Blockly.BlockSvg.prototype.setInputHighlight = function(disabled) {
+  if (this.disabled != disabled) {
+    Blockly.BlockSvg.superClass_.setDisabled.call(this, disabled);
+    if (this.rendered) {
+      this.updateInputHighlighted();
+    }
+  }
+};
+
+/**
+ * Set whether the block is highlighted or not.  Block highlighting is
+ * often used to visually mark blocks currently being executed.
+ * @param {boolean} highlighted True if highlighted.
+ */
+Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
+  if (!this.rendered) {
+    return;
+  }
+  if (highlighted) {
+    this.svgPath_.setAttribute('filter',
+        'url(#' + this.workspace.options.embossFilterId + ')');
+  } else {
+    Blockly.utils.removeAttribute(this.svgPath_, 'filter');
   }
 };
 

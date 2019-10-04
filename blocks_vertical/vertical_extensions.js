@@ -79,6 +79,20 @@ Blockly.ScratchBlocks.VerticalExtensions.SHAPE_STATEMENT = function() {
 };
 
 /**
+ * Extension to make a block fit into a stack of statements, regardless of its
+ * inputs.  That means the block should have a previous connection and a next
+ * connection and have inline inputs.
+ * koov-specific: add type GHOST into statement
+ * @this {Blockly.Block}
+ * @readonly
+ */
+Blockly.ScratchBlocks.VerticalExtensions.SHAPE_STATEMENT_GHOST = function() {
+  this.setInputsInline(true);
+  this.setPreviousStatement(true, 'GHOST');
+  this.setNextStatement(true, 'GHOST');
+};
+
+/**
  * Extension to make a block be shaped as a hat block, regardless of its
  * inputs.  That means the block should have a next connection and have inline
  * inputs, but have no previous connection.
@@ -100,6 +114,18 @@ Blockly.ScratchBlocks.VerticalExtensions.SHAPE_HAT = function() {
 Blockly.ScratchBlocks.VerticalExtensions.SHAPE_END = function() {
   this.setInputsInline(true);
   this.setPreviousStatement(true, null);
+};
+
+/**
+ * Extension to make a block be shaped as an end block, regardless of its
+ * inputs.  That means the block should have a previous connection and have
+ * inline inputs, but have no next connection.
+ * @this {Blockly.Block}
+ * @readonly
+ */
+Blockly.ScratchBlocks.VerticalExtensions.SHAPE_END_GHOST = function() {
+  this.setInputsInline(true);
+  this.setPreviousStatement(true, 'GHOST');
 };
 
 /**
@@ -238,10 +264,14 @@ Blockly.ScratchBlocks.VerticalExtensions.registerAll = function() {
   // Register extensions for common block shapes.
   Blockly.Extensions.register('shape_statement',
       Blockly.ScratchBlocks.VerticalExtensions.SHAPE_STATEMENT);
+  Blockly.Extensions.register('shape_statement_ghost',
+      Blockly.ScratchBlocks.VerticalExtensions.SHAPE_STATEMENT_GHOST);
   Blockly.Extensions.register('shape_hat',
       Blockly.ScratchBlocks.VerticalExtensions.SHAPE_HAT);
   Blockly.Extensions.register('shape_end',
       Blockly.ScratchBlocks.VerticalExtensions.SHAPE_END);
+  Blockly.Extensions.register('shape_end_ghost',
+      Blockly.ScratchBlocks.VerticalExtensions.SHAPE_END_GHOST);
 
   // Output shapes and types are related.
   Blockly.Extensions.register('output_number',

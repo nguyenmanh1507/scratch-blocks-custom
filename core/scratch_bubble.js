@@ -186,13 +186,14 @@ Blockly.ScratchBubble.prototype.createDom_ = function(content, hasResize, minimi
   this.bubbleArrow_ = Blockly.utils.createSvgElement('line',
       {'stroke-linecap': 'round'},
       this.bubbleGroup_);
-  this.bubbleBack_ = Blockly.utils.createSvgElement('rect',
+  this.bubbleBack_ = Blockly.utils.createSvgElement('path',
       {
         'class': 'blocklyDraggable scratchCommentRect',
-        'x': 0,
-        'y': 0,
-        'rx': 4 * Blockly.ScratchBubble.BORDER_WIDTH,
-        'ry': 4 * Blockly.ScratchBubble.BORDER_WIDTH
+        // 'x': 0,
+        // 'y': 0,
+        // 'rx': 4 * Blockly.ScratchBubble.BORDER_WIDTH,
+        // 'ry': 4 * Blockly.ScratchBubble.BORDER_WIDTH,
+        'd': 'M0,16 L10,10 Q10,0 20,0 H290 Q300,0 300,10 V22 Q300,32 290,32 H20 Q10,32 10,22 Z'
       },
       this.bubbleGroup_);
 
@@ -270,6 +271,12 @@ Blockly.ScratchBubble.prototype.createTopBarIcons_ = function() {
       }, this.bubbleGroup_);
   this.deleteIcon_.setAttributeNS('http://www.w3.org/1999/xlink',
       'xlink:href', Blockly.mainWorkspace.options.pathToMedia + 'delete-x.svg');
+  
+  // koov-specific
+  if (this.comment.block_.isKoovComment_) {
+    this.minimizeArrow_.style.display = 'none';
+    this.deleteIcon_.style.display = 'none';
+  }
 };
 
 /**
@@ -287,6 +294,12 @@ Blockly.ScratchBubble.prototype.createTopBarLabel_ = function() {
         'dominant-baseline': 'middle'
       }, this.bubbleGroup_);
 
+  // koov-specific
+  if (this.comment.block_.isKoovComment_) {
+    this.topBarLabel_.setAttribute('fill', '#5e7592');
+    this.topBarLabel_.style.fontWeight = 'bold';
+  }
+  
   var labelTextNode = document.createTextNode(this.labelText_);
   this.topBarLabel_.appendChild(labelTextNode);
 };
@@ -558,6 +571,11 @@ Blockly.ScratchBubble.prototype.moveTo = function(x, y) {
  * @package
  */
 Blockly.ScratchBubble.prototype.setBubbleSize = function(width, height) {
+  // koov-specific
+  if (this.comment.block_.isKoovComment_) {
+    width = 300;
+  }
+
   var doubleBorderWidth = 2 * Blockly.ScratchBubble.BORDER_WIDTH;
   // Minimum size of a bubble.
   width = Math.max(width, doubleBorderWidth + 50);
@@ -568,6 +586,14 @@ Blockly.ScratchBubble.prototype.setBubbleSize = function(width, height) {
   this.bubbleBack_.setAttribute('height', height);
   this.commentTopBar_.setAttribute('width', width);
   this.commentTopBar_.setAttribute('height', Blockly.ScratchBubble.TOP_BAR_HEIGHT);
+  // koov-specific
+  if (this.comment.block_.isKoovComment_) {
+    this.bubbleBack_.style.fill = '#78bee2';
+    this.bubbleBack_.style.stroke = '#78bee2';
+    this.bubbleArrow_.style.stroke = 'transparent';
+    this.commentTopBar_.style.fill = 'transparent';
+  }
+
   if (this.workspace_.RTL) {
     this.minimizeArrow_.setAttribute('x', width -
         (Blockly.ScratchBubble.MINIMIZE_ICON_SIZE) -
