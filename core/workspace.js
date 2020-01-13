@@ -113,6 +113,12 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.potentialVariableMap_ = null;
+
+  /**
+   * KOOV-Specific BlocksGhost
+   * @type {!Array.<!String>}
+   */
+  this.blocksGhost = this.options.blocksGhost || [];
 };
 
 /**

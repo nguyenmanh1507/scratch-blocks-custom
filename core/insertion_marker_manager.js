@@ -225,11 +225,18 @@ Blockly.InsertionMarkerManager.prototype.applyConnections = function() {
 Blockly.InsertionMarkerManager.prototype.update = function(dxy, deleteArea) {
   var candidate = this.getCandidate_(dxy);
 
+  // koov-specific
+  var haveBlockGhost = false;
+  if (candidate.closest) {
+    haveBlockGhost = candidate.closest.sourceBlock_.type === 'control_forever';
+    console.log(candidate.closest.sourceBlock_.id);
+  }
+
   this.wouldDeleteBlock_ = this.shouldDelete_(candidate, deleteArea);
   var shouldUpdate = this.wouldDeleteBlock_ ||
       this.shouldUpdatePreviews_(candidate, dxy);
 
-  if (shouldUpdate) {
+  if (shouldUpdate && !haveBlockGhost) {
     // Don't fire events for insertion marker creation or movement.
     Blockly.Events.disable();
     this.maybeHidePreview_(candidate);

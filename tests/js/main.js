@@ -26,6 +26,7 @@
       dragShadowOpacity: 0.6,
     },
     grid: { spacing: 30, length: 3, colour: '#ccc', snap: true },
+    blocksGhost: ['', '', '']
   });
 
   window.ws = workspace;
@@ -72,16 +73,20 @@
     null,
     null,
     true,
-    true,
+    true
   );
   // setVarBlock.setHighlightBlock(true);
 
+  const aBlock = workspace.getBlockById(';kECNk;CI3k!VM^sP3d%');
+  aBlock.setDisabled(true);
+  console.log({aBlock});
   const fBlock = workspace.getBlockById('nRZj=0d0rSnlCUqHi}GF');
   console.log({ fBlock });
   const coordinate = fBlock.getRelativeToSurfaceXY();
   setVarBlock.moveBy(coordinate.x, coordinate.y);
 
   fBlock.setInputHighlight(true);
+  fBlock.setEditable(false);
 
   // const comment = new Blockly.ScratchBlockComment(
   //   setVarBlock,
